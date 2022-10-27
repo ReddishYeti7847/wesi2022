@@ -1,0 +1,336 @@
+2022/ 9/27
+1.  gitの作成
+
+    1.1.    git初期設定
+    
+        $ git config --global user.email 〇〇     # 自分のe-mail
+        $ git config --global user.name "〇〇"    # 自分の名前（※git_hubと違う名前でもよい）
+        
+        $ cd wesi2022
+        $ git init    # Gitの初期化、リポジトリフォルダ作成（プロジェクトごとに）
+        
+2.  インストール
+
+    2.1.    アップデートなど
+    
+        $ cd ..
+        $ sudo yum -y update          # アップデート
+        $ python -V                   # pythonのバージョン確認
+        $ pip install --upgrade pip   # pipのアップデート
+        
+    2.2.    Flaskのインストール
+    
+        $ pip install flask
+        $ pip install flask_sqlalchemy
+        
+            ※https://newtechnologylifestyle.net/amazon-awsec2-flask/
+        
+    2.3.    MySQLのインストール
+    
+        $ sudo yum remove mariadb*    # mariadbをアンインストールする
+        
+        $ sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm -y
+        $ sudo yum-config-manager –disable mysql80-community
+        $ sudo yum-config-manager –enable mysql57-community
+        $ sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+        $ sudo yum install mysql-community-server
+        
+        $ sudo systemctl start mysqld.service
+        
+    2.4.    MySQLの設定変更など
+    
+        # タイムゾーンを日本に変更（UTC → JST）
+        $ sudo cp /etc/sysconfig/clock /etc/sysconfig/clock.org
+        $ sudo vim /etc/sysconfig/clock
+        
+        ZONE="UTC" を ZONE="Asia/Tokyo" に変更
+        
+        # ローカル時間を日本時間に変更
+        $ sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+        
+        # EC2を再起動する
+        $ sudo reboot
+        
+        # タイムゾーンの確認
+        $ date
+        
+        JSTの文字があることを確認
+        
+    2.5.    パスワード変更
+    
+        $ sudo vim /var/log/mysqld.log
+        
+        A temporary password is の文を見つける
+        A temporary password is generated for root@localhost: UhhD2uqr<awv　の記入がある
+        初期パスワードは「UhhD2uqr<awv」
+        
+            ※https://qiita.com/RyosukeSomeya/items/c695487588f5ac28d9f4
+            
+        $ sudo systemctl start mysqld.service   # MySQLの起動
+        $ mysql -u root -p                      # MySQLにログインする
+        
+            ※https://26gram.com/start-stop-mysql
+            ※https://26gram.com/connect-to-mysql
+        
+        初期パスワードを入力
+        
+        mysql> set password for root@localhost = 'Root.123';    #パスワードを「Root.123」変更する
+        
+            ※https://blog.katsubemakito.net/mysql/set-password
+        
+    2.6.    パスワードポリシーの変更
+        
+        mysql> SHOW VARIABLES LIKE 'validate_password%';    #確認
+        mysql> set global validate_password.policy=LOW;
+        mysql> SHOW VARIABLES LIKE 'validate_password%';    #確認（「| validate_password.policy             | LOW   |」であればOK）
+        mysql> exit
+        
+    2.7.    phpMyAdminのインストール
+    
+2022/10/04
+        $ sudo yum update
+        $ sudo yum install httpd
+        $ sudo yum install php70-mbstring.x86_64 php70-zip.x86_64 -y
+    
+        # php7.2をインストール
+        $ amazon-linux-extras
+        $ amazon-linux-extras info php7.2
+        $ sudo amazon-linux-extras install php7.2
+        
+        # バージョン確認
+        $ sudo yum list installed | grep httpd  #バージョン2.4
+        $ sudo yum list installed | grep php    #バージョン7.2
+        
+        # apacheの再起動
+        $ sudo service httpd restart
+        
+        # phpMyAdminのインストール
+        $ cd /var/www/html
+        $ sudo wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+        
+        $ cd readlink -f wesi2022               #wesi2022の絶対パスを取得
+            ※ファイルの絶対パスを取得する:https://staffblog.amelieff.jp/entry/2018/05/30/094427
+        /home/ec2-user/environment/wesi2022
+        $ ls -a /                               #ルートの中のフォルダを確認
+        $ cd /home/ec2-user/environment/tool    #toolに移動
+        
+        $ sudo mkdir phpMyAdmin
+        $ sudo tar -xvzf phpMyAdmin-latest-all-languages.tar.gz -C phpMyAdmin --strip-components 1  ← 失敗
+        
+        $ sudo wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+        $ sudo tar -xvzf phpMyAdmin-latest-all-languages.tar.gz -C phpMyAdmin --strip-components 1  ← 成功
+        
+        $ sudo rm phpMyAdmin-latest-all-languages.tar.gz
+        $ cd /var/www/html
+        $ sudo rm phpMyAdmin-latest-all-languages.tar.gz
+        $ cd /home/ec2-user/environment/
+        
+        #接続
+        $ sudo service mysqld start
+        $ php -S $IP:$PORT
+        https://ef5caf0d0a8d4796be3372a5d609c5c4.vfs.cloud9.us-east-1.amazonaws.com/tool/phpMyAdmin/index.phpのURLに接続
+        （/tool/phpMyAdmin/index.phpを末尾に加える）
+        
+2022/10/17
+        #ログインできないので…
+            # mysqli::real_connect(): The server requested authentication method unknown to the client [caching_sha2_password]　と言うエラー文
+            
+        $ mysql -u root -p
+        
+        > SELECT host,user,plugin FROM mysql.user where user='root';
+        > alter user 'root'@'localhost' identified with mysql_native_password by 'Root.123';
+        > SELECT host,user,plugin FROM mysql.user where user='root';
+        > exit
+            
+            ※https://labor.ewigleere.net/2020/11/01/phpmyadmin_login_caching_sha2_password/
+            
+        $ php -S $IP:$PORT
+        https://ef5caf0d0a8d4796be3372a5d609c5c4.vfs.cloud9.us-east-1.amazonaws.com/tool/phpMyAdmin/index.phpのURLに接続
+        
+        phpMyAdminにログイン
+        
+2022/10/18
+3.  データベース
+
+    3.1.    データベース作成
+    
+        「scheme」
+        
+    3.2.    テーブル
+    
+    region	地方
+    	id                              
+	    name		地方名
+    				北海道・東北地方、関東地方 ... その他
+    	name_kana	地方名の読み
+    	name_roman	地方名のローマ字表記
+    	order		表示順
+    	
+    	CREATE TABLE `scheme`.`region` (
+        	`id` INT NOT NULL AUTO_INCREMENT ,
+        	`name` VARCHAR(16) NOT NULL ,
+        	`name_kana` VARCHAR(32) NOT NULL ,
+        	`name_roman` VARCHAR(64) NOT NULL ,
+        	`order` INT NOT NULL ,
+        	PRIMARY KEY (`id`))
+        	ENGINE = InnoDB;
+        	
+    area	県
+    	id
+	    region_id		FK
+	    name			都道府県名
+		    		北海道、青森県 ... その他
+	    name_kana		地方名の読み
+	    name_roman		地方名のローマ字表記
+	    order			表示順
+	    latitude		県庁所在地の緯度
+	    longitude		県庁所在地の経度
+    
+        CREATE TABLE `scheme`.`area` (
+            `id` INT NOT NULL AUTO_INCREMENT ,
+            `region_id` INT NOT NULL ,
+            `name` VARCHAR(8) NOT NULL ,
+            `name_kana` VARCHAR(16) NOT NULL ,
+            `name_roman` VARCHAR(32) NOT NULL ,
+            `order` INT NOT NULL ,
+            `latitude` FLOAT NOT NULL ,
+            `longitude` FLOAT NOT NULL ,
+            PRIMARY KEY (`id`))
+            ENGINE = InnoDB;
+            
+        「area」テーブル → 構造 → テーブルの構造
+        region_idにインデックスを追加
+        「area」テーブル → 構造 → リレーションビュー
+        
+            制約プロパティ
+                ON DELETE   : RESTRICT  # 参照元カラムの削除を許可しない
+                ON UPDATE   : CASCADE   # 親テーブルの参照先カラムを更新すると、子テーブルの参照元カラムの更新を行う。
+                
+                ※県と地方はほぼ変更なし、地点や調査は随時追加や削除がある
+                ※地点は必ず調査に含まれる（調査のない地点はエラーになる…はず、地点のない調査はあるかも）
+        
+            カラム
+                region_id
+            
+            外部キー制約 (INNODB)
+                データベース    : scheme
+                テーブル        : region
+                カラム          : id
+            
+            ALTER TABLE `area` ADD FOREIGN KEY (`region_id`) REFERENCES `region`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+            
+            ※phpMyAdminでのテーブル作成と外部キー制約（FOREIGN KEY）設定:   https://web-svr.com/%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E7%B7%A8/53.php 
+            ※FOREIGN KEY制約(外部キー制約を設定する):                       https://www.javadrive.jp/mysql/table/index11.html
+        
+    survey	調査
+	    id
+	    area_id			    FK
+	    name			    調査名
+	    surveyor		    調査者
+	    director_name		指導者名
+	    director_address	指導者連絡先
+	    note			    追加情報
+	    
+	    CREATE TABLE `scheme`.`survey` (
+	        `id` INT NOT NULL AUTO_INCREMENT ,
+	        `area_id` INT NOT NULL ,
+	        `name` TEXT NOT NULL ,
+	        `surveyor` TEXT NOT NULL ,
+	        `director_name` TEXT NOT NULL ,
+	        `director_address` TEXT NOT NULL ,
+	        `note` TEXT NULL DEFAULT NULL ,
+	        PRIMARY KEY (`id`))
+	        ENGINE = InnoDB;
+	        
+	    area_idにインデックスを追加
+	    
+	    制約プロパティ
+            ON DELETE   : RESTRICT  # 参照元カラムの削除を許可しない
+            ON UPDATE   : CASCADE   # 親テーブルの参照先カラムを更新すると、子テーブルの参照元カラムの更新を行う。
+            
+            カラム
+                area_id
+            
+            外部キー制約 (INNODB)
+                データベース    : scheme
+                テーブル        : area
+                カラム          : id
+                
+            ALTER TABLE `survey` ADD FOREIGN KEY (`area_id`) REFERENCES `area`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+            
+    site	地点
+	    id
+	    surver_id		FK
+	    name			地点名
+	    latitude		緯度
+	    longitude		軽度
+	    date			調査日時
+	    value00			調査結果
+		    		1桁目: 分類
+			    	2桁目: 小項目
+	    note			追加情報
+	    
+	    CREATE TABLE `scheme`.`site` (
+	        `id` INT NOT NULL AUTO_INCREMENT ,
+	        `surver_id` INT NOT NULL ,
+	        `name` TEXT NOT NULL ,
+	        `latitude` FLOAT NOT NULL ,
+	        `longitude` FLOAT NOT NULL ,
+	        `date` DATE NOT NULL ,
+	        `value00` FLOAT NULL ,
+	        `value01` FLOAT NULL ,
+	        `value02` FLOAT NULL ,
+	        `value03` FLOAT NULL ,
+	        `value04` FLOAT NULL ,
+	        `value10` FLOAT NULL ,
+	        `value11` FLOAT NULL ,
+	        `value12` FLOAT NULL ,
+	        `value20` FLOAT NULL ,
+	        `value21` FLOAT NULL ,
+	        `value22` FLOAT NULL ,
+	        `value23` FLOAT NULL ,
+	        `value30` FLOAT NULL ,
+	        `value31` FLOAT NULL ,
+	        `value32` FLOAT NULL ,
+	        `value40` FLOAT NULL ,
+	        `value41` FLOAT NULL ,
+	        `value42` FLOAT NULL ,
+	        `value43` FLOAT NULL ,
+	        `value44` FLOAT NULL ,
+	        `value50` FLOAT NULL ,
+	        `value51` FLOAT NULL ,
+	        `value52` FLOAT NULL ,
+	        `value53` FLOAT NULL ,
+	        `value54` FLOAT NULL ,
+	        `note` TEXT NULL ,
+	        PRIMARY KEY (`id`))
+	        ENGINE = InnoDB;
+2022/10/27
+	        
+        surver_idにインデックスを追加
+	    
+	    制約プロパティ
+            ON DELETE   : CASCADE   # 親テーブルの参照先カラムを削除すると、子テーブルの参照元カラムも削除する。
+            ON UPDATE   : CASCADE   # 親テーブルの参照先カラムを更新すると、子テーブルの参照元カラムの更新を行う。
+            
+            カラム
+                surver_id
+            
+            外部キー制約 (INNODB)
+                データベース    : scheme
+                テーブル        : survey
+                カラム          : id
+                
+            ALTER TABLE `site` ADD FOREIGN KEY (`surver_id`) REFERENCES `survey`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+            
+    3.3.    データを入れる
+    
+        INSERT INTO region (id, name, name_kana, name_roman, ord) VALUES
+	        (1, "北海道・東北地方", "ほっかいどう・とうほく", "hokkai_tohoku", 1),
+            (2, "関東・甲信地方", "かんとう", "kantou", 2);
+            
+        ※orderは予約語なのでエラーが出る。
+        
+        INSERT INTO area (id, region_id, name, name_kana, name_roman, ord, latitude, longitude) VALUES
+            (1, 1, "北海道", "ほっかいどう", "hokkai do", 1, 43.06417, 141.34694),
+            (2, 1, "青森県", "あおもりけん", "aomori ken", 2, 40.82444, 140.74);
