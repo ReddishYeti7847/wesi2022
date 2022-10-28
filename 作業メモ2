@@ -3,7 +3,19 @@
 
     4.1.
     
-        #gitに登録
+        作成
+        ・wesi2022.py
+    
+        #git
         
         $ cd wesi2022/
         $ git add .
+        $ git commit -m "はじめてのコミット"
+        $ git status
+        
+    # commit "テンプレート作成"
+    
+        作成
+        ・templates
+        ・templates/layout.html
+        ・templates/index.html

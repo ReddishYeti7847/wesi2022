@@ -86,6 +86,7 @@
         mysql> exit
         
     2.7.    phpMyAdminのインストール
+        ※https://qiita.com/s_Pure/items/2bf5bafffdbb6f20422a
     
 2022/10/04
         $ sudo yum update
