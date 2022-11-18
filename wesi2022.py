@@ -82,14 +82,24 @@ class Site(db.Model):
     note        = db.Column(db.TEXT)
     
 #メイン
-@app.route('/')
+@app.route("/")
 def index():
     regions = Region.query.all()
     areas = Area.query.all()
     return render_template("index.html", title = "WESI2022", regions = regions, areas = areas)
+    
+@app.route("/surveys/index/<int:id>")
+def surveys_index(id):
+    surveys = Survey.query.all()
+    return render_template("survey_index.html", title = "WESI2022", surveys = surveys)
+
+@app.route("/sites/index/<int:id>")
+def sites_index(id):
+    sites = Site.query.all()
+    return render_template("site_index.html", title = "WESI2022", sites = sites)
 
 #CSVを利用してデータを入力する
-@app.route('/csv_import')
+@app.route("/csv_import")
 def csv_import():
     #データベースをリセットする
     deletes = Survey.query.all()
@@ -204,7 +214,6 @@ def csv_import():
         testname = testname + survey.name
         db.session.commit()
 
-    
     return testname
 
 if __name__ == "__main__":

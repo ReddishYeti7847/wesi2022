@@ -57,3 +57,13 @@
     
     site : 数値は表、レーダーチャートを用いて表示する
     地図を表示させる必要がある(google mapを取り込む)(先にsitesでピンを立てる)
+    
+2022/11/18
+    # commit "RegionからSiteまでのデータベースモデルを定義して、CSVからデータベースに入力できるようにした。また、地方と県を表示できるようにした。"
+    
+    ※Pythonのjinja2の基本構文（値の取得、分岐構文「if,elif,else」、ループ構文「for」)
+        https://lightgauge.net/language/python/8792/
+    ※Python NaNを含むデータをMySQLに保存したいとき（コードとエラー対処）
+        https://ssrv.net/tech/python-mysql-nan/
+    ※pandasでカラムサイズが一定でないcsv/tsvを読み込む
+        http://blog.mwsoft.jp/article/113600124.html
