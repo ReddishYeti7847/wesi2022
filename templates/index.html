@@ -1,4 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
-
+    {% for region in regions %}
+        <p>{{ region.name }}</p>
+        
+        <ul>
+        {% for area in areas %}
+            {% if area.region_id == region.id %}
+                <li>{{ area.name }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        
+    {% endfor %}
 {% endblock %}

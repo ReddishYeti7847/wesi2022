@@ -12,10 +12,48 @@
         $ git add .
         $ git commit -m "はじめてのコミット"
         $ git status
-        
+     
+2022/10/28   
     # commit "テンプレート作成"
     
         作成
         ・templates
         ・templates/layout.html
         ・templates/index.html
+        
+    # メモ
+        # データベースの構造、地方と県を出力する部分完成
+        # surveysやsitesの出力もできるようにする
+        # CSVでデータベースを入力できるようにすると手入力より楽
+        
+    # 追加のインストール
+        $ pip install pymysql
+        $ pip install pandas
+        
+2022/11/04
+    # メモ
+        レーダーチャートの描画
+            areaやregionのデータを読めるように
+            surveyやsiteを取り組む
+            Chart.js?　や他の高級なライブラリがある
+            それらを探す
+            
+2022/11/08
+    ※SQLAlchemy データ削除(Dlete)エラーの解決方法【データを１件ずつにすれば解消できる】
+        https://setsunaru.com/programming/python/sqlalchemy-delete-errror/
+    
+    CSVに「,,」のデータ（空のデータ）があるとエラーで止まってしますので…
+        import numpy as np
+
+        csvを読み込んだあと、
+        df = df.replace({np.nan: None})
+        を実行
+    
+        ※Python NaNを含むデータをMySQLに保存したいとき（コードとエラー対処）
+            https://ssrv.net/tech/python-mysql-nan/
+            
+            
+2022/11/11
+    
+    site : 数値は表、レーダーチャートを用いて表示する
+    地図を表示させる必要がある(google mapを取り込む)(先にsitesでピンを立てる)

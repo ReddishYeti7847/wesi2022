@@ -236,9 +236,9 @@
 	        `id` INT NOT NULL AUTO_INCREMENT ,
 	        `area_id` INT NOT NULL ,
 	        `name` TEXT NOT NULL ,
-	        `surveyor` TEXT NOT NULL ,
-	        `director_name` TEXT NOT NULL ,
-	        `director_address` TEXT NOT NULL ,
+	        `surveyor` TEXT NULL ,
+	        `director_name` TEXT NULL ,
+	        `director_address` TEXT NULL ,
 	        `note` TEXT NULL DEFAULT NULL ,
 	        PRIMARY KEY (`id`))
 	        ENGINE = InnoDB;
@@ -261,7 +261,7 @@
             
     site	地点
 	    id
-	    surver_id		FK
+	    survey_id		FK
 	    name			地点名
 	    latitude		緯度
 	    longitude		軽度
@@ -273,7 +273,7 @@
 	    
 	    CREATE TABLE `scheme`.`site` (
 	        `id` INT NOT NULL AUTO_INCREMENT ,
-	        `surver_id` INT NOT NULL ,
+	        `survey_id` INT NOT NULL ,
 	        `name` TEXT NOT NULL ,
 	        `latitude` FLOAT NOT NULL ,
 	        `longitude` FLOAT NOT NULL ,

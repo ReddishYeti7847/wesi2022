@@ -1,0 +1,8 @@
+name,name_kana,name_roman,order
+北海道・東北地方,ほっかいどう・とうほく,hokkai_tohoku,1
+関東・甲信地方,かんとう,kantou,2
+北陸・東海地方,ちゅうぶ,tyubu,3
+近畿地方,きんき,kinki,4
+中国・四国地方,ちゅうごく・しこく,tyugoku_sikoku,5
+九州・沖縄地方,きゅうしゅう・おきなわ,kyusyu_okinawa,6
+その他,そのた,sonota,7
