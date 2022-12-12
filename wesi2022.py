@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 import pandas as pd
 import numpy as np
 
@@ -84,18 +85,34 @@ class Site(db.Model):
 #メイン
 @app.route("/")
 def index():
-    regions = Region.query.all()
-    areas = Area.query.all()
-    return render_template("index.html", title = "WESI2022", regions = regions, areas = areas)
+    regions         = Region.query.all()
+    areas           = Area.query.all()
+    region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.region_id).group_by(Region.name, Survey.id).count()
+    area_survey_count   = Survey.query.filter_by(area_id=id).group_by().count()
+    #survey_count    = Survey.query.filter_by(area_id=id).group_by(Survey.area_id).count()
+    return render_template("index.html", title = "WESI2022", regions = regions, areas = areas, region_survey_count = region_survey_count, survey_count = area_survey_count)
     
 @app.route("/surveys/index/<int:id>")
 def surveys_index(id):
     surveys = Survey.query.all()
-    return render_template("survey_index.html", title = "WESI2022", surveys = surveys)
+    area    = Area.query.filter_by(id=id).first()
+    
+    #survey_count = Region.query.filter_by(Area.area_id=id).count().sum()
+    #survey_count = Survey.query.filter_by(area_id=id).group_by().count()
+    
+    #subq = db.session.query(Area.id).filter(Area.id == id).group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id)
+    #survey_count = db.session.query(subq, func.count(Survey.area_id).label("count")).first()
+    
+    region_count = None
+    area_count = db.session.query(Area.id, func.count(Survey.area_id).label("count")).filter(Area.id == id).group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id).first()    #AreaテーブルのidとSurveyテーブルのarea_idの個数を数える
+    #site_count = Site.query.filter_by().group_by().count()
+    survey_count = db.session.query(Survey.id, func.count(Site.survey_id).label("count")).filter().group_by(Site.survey_id).join(Site, Survey.id == Site.survey_id).all()
+    
+    return render_template("survey_index.html", title = "WESI2022", surveys = surveys, area = area, region_count = region_count, area_count = area_count, survey_count = survey_count)
 
 @app.route("/sites/index/<int:id>")
 def sites_index(id):
-    sites = Site.query.all()
+    sites   = Site.query.all()
     return render_template("site_index.html", title = "WESI2022", sites = sites)
 
 #CSVを利用してデータを入力する
@@ -215,6 +232,17 @@ def csv_import():
         db.session.commit()
 
     return testname
+
+@app.route("/test")
+def test():
+    regions         = Region.query.all()
+    #region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.region_id).group_by(Region.id, Area.id).count()
+    #survey_count = Survey.query.select(Survey.area_id).group_by(Survey.area_id).having(Survey.area_id == 1).count()
+    #survey_count = db.engine.execute("SELECT COUNT(*) FROM survey INNER JOIN area ON survey.area_id = area.id WHERE area.id = 4;")
+    #survey_count = db.engine.execute("SELECT COUNT(*) FROM survey;")
+
+    return render_template("var_test.html", title = "WESI2022", regions = regions, region_survey_count = survey_count)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port = 8080)

@@ -67,3 +67,121 @@
         https://ssrv.net/tech/python-mysql-nan/
     ※pandasでカラムサイズが一定でないcsv/tsvを読み込む
         http://blog.mwsoft.jp/article/113600124.html
+        
+    # commit "surveyとsiteの一覧を表示するようにした。"
+    
+    
+    
+    ゼミのメモ
+    ・一覧表示から個別表示を最優先
+    ・飾りつけ（Bootstrap） → Map表示 → レーダーチャート表示
+    ※　Bootstrap入れると挙動が変わる、Mapとレーダーチャートと競合する可能性がある
+            →その場合はgitを戻してやり直す（）
+            
+    # SQLメモ
+        県のsurveyの数を調べる
+            SELECT COUNT(*)
+            FROM survey INNER JOIN area ON survey.area_id = area.id
+            WHERE area.id = 4;
+            
+        県のsurveyの一覧を表示
+            SELECT area.name, COUNT(*)
+            FROM survey INNER JOIN area ON survey.area_id = area.id
+            GROUP BY area.name;
+            
+        地方のsurveyの一覧を表示
+            SELECT region.name, COUNT(*)
+            FROM survey
+            INNER JOIN area ON survey.area_id = area.id
+            INNER JOIN region ON area.region_id = region.id
+            GROUP BY region.name;
+            
+            (
+                Survey.query
+                .filter_by(area_id=id)
+                .group_by()
+                .count()
+                
+2022/11/25
+※
+    SQLでできることはSQLAlchemyでできる
+    なるべくデータベース側で処理させる
+    プログラム側でもできるが、あまり正しくない（なるべくSQLAlchemyで）
+    
+2022/11/29
+    地方のsurveyの一覧を表示
+    region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.id).group_by(Region.name, Survey.id).count()
+    
+    ※
+    region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.id).group_by(Region.name).count()
+    のように、非集約カラムでトラブルが起きるケースがある
+    
+    エラー例
+    sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1055, "Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'scheme.survey.id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by")
+    
+    解決策：group_by()のカッコの中に、Survey.idを含める
+    
+    ※Error Messages
+        https://docs.sqlalchemy.org/en/14/errors.html#error-e3q8
+    ※MySQLでSELECT句とGROUP BYの非集約カラムが揃ってなくても通るケース
+        https://qiita.com/michi_wkwk/items/a7fe1b144f8049ba4c1f
+    ※12.20.3 MySQL での GROUP BY の処理
+        https://docs.oracle.com/cd/E17952_01/mysql-8.0-ja/group-by-handling.html
+        
+2022/12/9
+    特定の県のsurveyの数
+    area_count = db.session.query(Area.id, func.count(Survey.area_id).label("count")).filter(Area.id == id).group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id).first()
+    
+    ※【SQLAlchemy】PythonでQueryデータベースから取得,【CRUD】
+        https://qiita.com/Bashi50/items/7f2214550e80b87fb922
+    ※MySQL「GROUP BY」エラー解決法・全４件
+        https://blog.capilano-fw.com/?p=7001
+    ※Flask-SQLAlchemyの使い方
+        https://qiita.com/msrks/items/673c083ca91f000d3ed1
+    ※SQL Alchemy　で、グループ化して各個数を数えて、カウント順にソートする
+        http://blog.livedoor.jp/kmiwa_project/archives/1078069420.html
+    ※SQLAlchemy ORMの基本的な使い方
+        https://qiita.com/TamaiHideaki/items/346bf843ee6ee1aa6e93
+    ※
+    
+    
+    
+    #メモ
+    帰ってくるものがNULL…
+    →帰ってきたものがNULLかどうか調べる
+    
+    プログラムで解決する
+    
+    ペース
+        カウント：本日中
+        
+        bootstrap、チャート、マップを1週間ずつ、わからなくなったら保留
+        どうしても進めない→
+        
+    卒論：ステップバイステップのアウトプット（写真）を論文に張り付ける
+        
+※６個のデータ
+SELECT area.name, COUNT(survey.id) AS count
+FROM survey INNER JOIN area ON survey.area_id = area.id
+GROUP BY survey.area_id;
+
+
+
+SELECT area.id, area.name, survey.name
+FROM survey INNER JOIN area ON survey.area_id = area.id;
+
+
+
+※７個のデータ
+SELECT COUNT(survey.id) AS count
+FROM survey RIGHT JOIN area ON survey.area_id = area.id
+GROUP BY survey.area_id;
+
+※７のみ出力
+SELECT COUNT(*)
+FROM(
+	SELECT survey.area_id
+	FROM survey RIGHT JOIN area ON survey.area_id = area.id
+	GROUP BY survey.area_id
+) cnt;
+
