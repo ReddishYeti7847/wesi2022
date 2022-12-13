@@ -1,15 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for region in regions %}
-        <p>{{ region.name }}（{{ region_survey_count }}）</p>
-        
-        <ul>
-        {% for area in areas %}
-            {% if area.region_id == region.id %}
-                <li><a href="/surveys/index/{{ area.id }}">{{ area.name }}（{{ survey_count }}）</a></li>
-            {% endif %}
-        {% endfor %}
-        </ul>
-        
-    {% endfor %}
+<div id="regions" class="container">
+    <div class="row">
+        <div class="accordion" id="accordionExample">
+            {% for region in regions %}
+
+                {# 折りたたむ側 #}
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ region.id }}" aria-expanded="true" aria-controls="collapse{{ region.id }}">
+                    {{ region.name }}（{{ region_survey_count }}）
+                </button>
+                
+                {# 折りたたまれる側 #}
+                <div id="collapse{{ region.id }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ region.id }}" data-bs-parent="#accordionExample">
+                    {% for area in areas %}
+                        {% if area.region_id == region.id %}
+                            <li class="list-group-item">
+                                <a class="stretched-link" href="/surveys/index/{{ area.id }}">{{ area.name }}（{{ survey_count }}）</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="note">
+            ()内は調査の登録件数です。
+        </div>
+    </div>
+</div>
 {% endblock %}

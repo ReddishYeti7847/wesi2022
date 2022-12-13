@@ -192,4 +192,13 @@ Bootstrap
     インストール
         $ pip install flask-bootstrap
         
+2022/12/13
+    # commit "surveyを表示できるようにした。regionやarea、surveyの数のカウントが中途半端の状態になっている。"
+    # commit "layout.htmlにbootstrapを適応して、headerとfooterを追加した。また、昔のindex.htmlとlayout.htmlは名前を変えてold_templatesフォルダに移した。flask-bootstrapは導入したが使用しない"
     
+    
+    
+    rubyのdo end構文：制御構文を使うもの
+    each：
+        ※Rubyにおけるブロック構文(do～end)の使い方
+            ※https://style.potepan.com/articles/27709.html
