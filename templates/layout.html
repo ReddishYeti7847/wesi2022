@@ -2,22 +2,66 @@
 <html>
     <head>
         <title>{{ title }}</title>
+
+        <!-- bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     </head>
     <body>
         <!-- タイトルを表示する -->
         <h1>{{ title }}</h1>
         
-        <!-- flashメッセージを表示する -->
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-info" role="alert">
-            {{ message }}
+        <!-- ヘッダー -->
+        <div class="container">
+            <div class="row">
+                <header class="header">
+                    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                        <a href="/" class="navbar-brand">WESI2022</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerMenu" aria-controls="headerMenu" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div id="headerMenu" class="collapse navbar-collapse justify-content-end">
+                            <ul class="navbar-nav">
+                                <li><a href="/"     class="nav-item">Home</a></li>
+                                <li><a href="/help" class="nav-item">Help</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+
+                <!-- flashメッセージを表示する -->
+                {% for message in get_flashed_messages() %}
+                <div class="alert alert-info" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                
+                <!-- rubyのflashメッセージのコード -->
+                {# 
+                <% flash.each do |message_type, message| %>
+                <div class="alert alert-<%= message_type %>"><%= message %></div>
+                #}
+            </div>
         </div>
-        {% endfor %}
-        
-        
         
         {% block content %}
             <!-- ここにメインコンテンツを別HTMLで書く -->
         {% endblock %}
+        
+        <!-- フッター -->
+        <div class="container">
+            <div class="row">
+                {# <%= debug(params) if Rails.env.development? %> #}
+                <footer class="footer fixed-bottom bg-dark">
+                    {# <% unless request.path == "/" %> #}
+                        <a href="/" class="footer-item footer-item-left">Back</a>
+                        
+                    {# <% end %> #}
+                    <a href="http://jswetohoku.web.fc2.com/" class="footer-item footer-item-right">日本水環境学会東北支部</a>
+                </footer>
+            </div>
+        </div>
+
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>

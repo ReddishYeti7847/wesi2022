@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+#from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import pandas as pd
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Root.123@localhost/scheme"
 
 db = SQLAlchemy(app)
+#bootstrap = Bootstrap(app)
 
 #データベースモデル定義
 class Region(db.Model):
@@ -235,13 +237,14 @@ def csv_import():
 
 @app.route("/test")
 def test():
-    regions         = Region.query.all()
+    #regions         = Region.query.all()
+    
     #region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.region_id).group_by(Region.id, Area.id).count()
     #survey_count = Survey.query.select(Survey.area_id).group_by(Survey.area_id).having(Survey.area_id == 1).count()
     #survey_count = db.engine.execute("SELECT COUNT(*) FROM survey INNER JOIN area ON survey.area_id = area.id WHERE area.id = 4;")
     #survey_count = db.engine.execute("SELECT COUNT(*) FROM survey;")
 
-    return render_template("var_test.html", title = "WESI2022", regions = regions, region_survey_count = survey_count)
+    return render_template("var_test.html", title = "WESI2022")#, regions = regions, region_survey_count = survey_count)
 
 
 if __name__ == "__main__":

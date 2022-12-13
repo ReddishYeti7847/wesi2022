@@ -1,14 +1,4 @@
 {% extends "layout.html" %}
 {% block content %}
-        <table>
-            <tr>
-                <th>name</th>
-            </tr>
-            {% for i in region_survey_count %}
-                <tr>
-                    <td>{{ i.id }}</td>
-                    <td>{{ i.count }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+
 {% endblock %}

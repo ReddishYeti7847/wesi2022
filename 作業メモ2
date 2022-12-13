@@ -185,3 +185,11 @@ FROM(
 	GROUP BY survey.area_id
 ) cnt;
 
+
+
+2022/12/12
+Bootstrap
+    インストール
+        $ pip install flask-bootstrap
+        
+    
