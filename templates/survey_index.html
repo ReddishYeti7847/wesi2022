@@ -1,39 +1,72 @@
 {% extends "layout.html" %}
 {% block content %}
-    <table>
-        <tr>
-            <th>地域 (調査数)</th>
-        </tr>
-        <tr>
-            <td><a href="/">{{ area.region.name }}（{{ area_count }}）</a></td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <th>県名 (調査数)</th>
-        </tr>
-        <tr>
-            <td>{{ area.name }}（{{ area_count.count }}）</td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <th>調査日/期間</td>
-            <th>調査者</td>
-            <th>調査名 (地点数)</td>
-        </tr>
-        {% for survey in surveys %}
-        <tr>
-            <td></td>
-            <td>{{ survey.surveyor }}</td>
-            <td>{{ survey.name }}（{{ survey_count.count }}）</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <ul>
-    {% for survey in surveys %}
-        <li><a href="/sites/index/{{ survey.id }}">{{ survey.name }}</a></li>
-    {% endfor %}
-    </ul>
+<div id="surveys" class="container">
+    {#
+    <div class="row map">
+        <div class="col-xs-12 col-md-12 col-sm-12">
+            <div id="map"></div>
+        </div>
+    </div>
+    #}
+    
+    <div class="row basic-informations">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {# 地域 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>地域（調査数）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ area.region.name }}（{{ area_count }}）</a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 県名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>県名 (調査数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ area.name }}（{{ area_count.count }}）</a></td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row detailed-informations">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査日/期間</th>
+                            <th>調査者</th>
+                            <th>調査名 (地点数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for survey in surveys %}
+                        {% if survey.area_id == area.id %}
+                        <tr class="tr-hover">
+                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}"></a></td>
+                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ survey.surveyor }}</a></td>
+                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ survey.name }}（）</a></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

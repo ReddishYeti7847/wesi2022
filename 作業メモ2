@@ -202,3 +202,6 @@ Bootstrap
     each：
         ※Rubyにおけるブロック構文(do～end)の使い方
             ※https://style.potepan.com/articles/27709.html
+
+2022/12/14
+    # commit "index.htmlにアコーディオンメニューを追加して、地方と県の表示を整えた"

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+    <table>
+        <tr>
+            <th>地域 (調査数)</th>
+        </tr>
+        <tr>
+            <td><a href="/">{{ area.region.name }}（{{ area_count }}）</a></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>県名 (調査数)</th>
+        </tr>
+        <tr>
+            <td>{{ area.name }}（{{ area_count.count }}）</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>調査日/期間</td>
+            <th>調査者</td>
+            <th>調査名 (地点数)</td>
+        </tr>
+        {% for survey in surveys %}
+        <tr>
+            <td></td>
+            <td>{{ survey.surveyor }}</td>
+            <td>{{ survey.name }}（{{ survey_count.count }}）</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+    {% for survey in surveys %}
+        <li><a href="/sites/index/{{ survey.id }}">{{ survey.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
