@@ -114,8 +114,22 @@ def surveys_index(id):
 
 @app.route("/sites/index/<int:id>")
 def sites_index(id):
+    survey  = Survey.query.filter_by(id=id).first()
     sites   = Site.query.all()
-    return render_template("site_index.html", title = "WESI2022", sites = sites)
+    return render_template("site_index.html", title = "WESI2022", survey = survey, sites = sites)
+
+@app.route("/sites/show/<int:id>")
+def sites_show(id):
+    site   = Site.query.filter_by(id=id).first()
+    
+    site_chart = {
+        "chart_labels":"仮項目1, 仮項目2, 仮項目3",
+        "chart_data":"2, 3, 5",
+        "chart_title":"仮タイトル",
+        "chart_target":"仮ターゲット",
+    }
+    
+    return render_template("site_show.html", title = "WESI2022", site = site, site_chart = site_chart)
 
 #CSVを利用してデータを入力する
 @app.route("/csv_import")

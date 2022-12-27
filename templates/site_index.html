@@ -1,8 +1,118 @@
 {% extends "layout.html" %}
 {% block content %}
-    <ul>
-    {% for site in sites %}
-        <li><a href="/sites/view/{{ site.id }}">{{ site.name }}</a></li>
-    {% endfor %}
-    </ul>
+<div id="surveys" class="container">
+    {#
+    <div class="row map">
+        <div class="col-xs-12 col-md-12 col-sm-12">
+            <div id="map"></div>
+        </div>
+    </div>
+    #}
+    
+    <div class="row basic-informations">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {# 地域名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>地域（調査数）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ survey.area.region.name }}</a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 県名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>県名 (調査数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ survey.area.name }}</a></td>
+                        </tr>
+                    </tbody>
+
+                    {# 調査名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査名 (地点数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/surveys/index/{{ survey.area_id }}">{{ survey.name }}</a></td>
+                        </tr>
+                    </tbody>
+
+                    {# 調査者 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2">{{ survey.surveyor }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 責任者 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>責任者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2">{{ survey.director_name }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 説明 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>説明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative" colspan="2">{{ survey.note }}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row detailed-informations">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査日</th>
+                            <th>地点名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for site in sites %}
+                        {% if site.survey_id == survey.id %}
+                        <tr class="tr-hover">
+                            <td class="position-relative"><a class="stretched-link" href="/sites/show/{{ site.id }}">{{ site.date }}</a></td>
+                            <td class="position-relative"><a class="stretched-link" href="/sites/show/{{ site.id }}">{{ site.name }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

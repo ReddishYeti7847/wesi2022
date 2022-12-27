@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block header %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+
+<div id="site" class="container">
+    <!-- ここにマップを書く -->
+    
+    <div class="row basic-informations">
+        <div class="col-xs-12 col-md-12 col-sm-12">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {# 地域名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>地域 (調査数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position-relative"><a class="stretched-link" href="/">{{ site.survey.area.region.name }}</a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 県名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>県名 (調査数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-hover">
+                            <td class="position-relative"><a class="stretched-link" href="/">{{ site.survey.area.name }}</a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 調査名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査名 (地点数)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-hover">
+                            <td class="position-relative"><a class="stretched-link" href="/surveys/index/{{ site.survey.area_id }}">{{ site.survey.name }}</a></td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 調査日 #}
+                    <thead thead="thead-light">
+                        <tr>
+                            <th>調査日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ site.date }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 地点名 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>地点名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ site.name }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 調査者 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>調査者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ site.survey.surveyor }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 責任者 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>責任者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ site.survey.director_name }}</td>
+                        </tr>
+                    </tbody>
+                    
+                    {# 説明 #}
+                    <thead class="thead-light">
+                        <tr>
+                            <th>説明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-wrap">{{ site.note }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row my-4">
+        <canvas id="myChart"></canvas>
+    </div>
+    <input type="hidden" id="chart_labels" name="chart_labels" value="{{ site_chart.chart_labels }}">
+    <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}">
+    <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}">
+    <input type="hidden" id="chart_data" name="chart_data" value="{{ site_chart.chart_data }}">
+</div>
+<script type="text/javascript" src="static/js/graph.js"></script>
+
+{#
+<div class="row detailed-informations">
+    <div class="col-xs-12 col-md-8 col-sm-8">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="3"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+#}
+{% endblock %}

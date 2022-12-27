@@ -201,7 +201,49 @@ Bootstrap
     rubyのdo end構文：制御構文を使うもの
     each：
         ※Rubyにおけるブロック構文(do～end)の使い方
-            ※https://style.potepan.com/articles/27709.html
+            https://style.potepan.com/articles/27709.html
 
 2022/12/14
     # commit "index.htmlにアコーディオンメニューを追加して、地方と県の表示を整えた"
+    
+2022/12/15
+    # commit "survey_index.htmlにbootstrapのデザインを適応して整えた。"
+    
+    カウントの数え方：県単位のカウントを取得する→
+    
+2022/12/16
+    flask-bootstrap
+    ※Flask-Bootstrapを使ってみる
+        https://mickey-happygolucky.hatenablog.com/entry/2018/03/28/070754
+    ※Flask-Bootstrap
+        https://pythonhosted.org/Flask-Bootstrap/index.html
+    ※mbr/flask-bootstrap
+        https://github.com/mbr/flask-bootstrap/tree/master/sample_app/templates
+    ※Flaskでブログ作成＃15「Bootstrapを適用する」
+        https://note.com/pc_python/n/n343341d96c5c#b7a42540-0813-48c3-96b9-1c8a9e8e4d69
+        
+    bootstrap
+    ※【Python Flask入門】CSSとBootstrapの使い方と適用方法
+        https://engineer-lifestyle-blog.com/code/python/flask-bootstrap-css-implementation/#flask-bootstrap
+    ※【Flask】Jinja2のテンプレート継承でHTMLファイルを役割ごとに分割する
+        https://tanuhack.com/flask-temp-extends/#headerhtml
+    ※Bootstrap4を利用してアコーディオンメニューを作ろう
+        https://cotodama.co/bootstrap4-accordion/#i-2
+    ※bootstrapでアコーディオンの初期表示を閉じた状態にしたい
+        https://teratail.com/questions/148440
+    
+    bootstrapの公式サイト
+    ※はじめに
+        https://getbootstrap.jp/docs/5.0/getting-started/introduction/
+    ※Collapse
+        https://getbootstrap.jp/docs/4.2/components/collapse/
+    ※Accordion(アコーディオン)
+        https://getbootstrap.jp/docs/5.0/components/accordion/
+    ※Stretched link (ストレッチリンク)
+        https://getbootstrap.jp/docs/5.0/helpers/stretched-link/
+        
+    chart.js
+    ※【超簡単】Flask×Chart.js ブラウザ上でグラフを表示する
+        https://qiita.com/kubochiro/items/874ccddb564c7e684000
+    ※入門
+        https://www.chartjs.org/docs/latest/getting-started/
