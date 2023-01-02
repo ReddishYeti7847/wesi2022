@@ -1,15 +1,10 @@
-//let title = document.getElementById('chart_title').value;
-//let target = document.getElementById('chart_target').value;
+let title = document.getElementById('chart_title').value;
+let target = document.getElementById('chart_target').value;
 let dstr = String(document.getElementById('chart_data').value);
 let darr = dstr.split(',');
 let dlabel = String(document.getElementById('chart_labels').value);
 let larr = dlabel.split(',');
-
-let ctx = []
-for (let i = 0; i < 6; i++) {
-    var str = 'siteChart' + i.toString();
-    ctx.push(document.getElementById(str).getContext('2d'));
-}
+let ctx = document.getElementById('myChart').getContext('2d');
 
 // 色の設定
 var colorSet = {
@@ -25,13 +20,22 @@ var colorSet = {
 // 色のRGB変換
 var color = Chart.helpers.color;
 
-for (let i = 0; i <6; i++) {
-let myRadarChart = new Chart(ctx[i], {
+let myRadarChart = new Chart(ctx, {
     type: 'radar',
     data: {
         labels: larr,
         datasets: [{
             data:darr,//app.pyのchart_data
+            //backgroundColor: "rgba(255,0,0,0.2)", // 線の下の塗りつぶしの色
+            //borderColor: "red",                   // 線の色
+            //borderWidth: 2,                       // 線の幅
+            //pointStyle: "circle",                 // 点の形状
+            //pointRadius: 6,                       // 点形状の半径
+            //pointBorderColor: "red",              // 点の境界線の色
+            //pointBorderWidth: 2,                  // 点の境界線の幅
+            //pointBackgroundColor: "yellow",       // 点の塗りつぶし色
+            //pointLabelFontSize: 20,
+            //label: target, //app.pyのchart_target
             
             backgroundColor: color(colorSet.red).alpha(0.5).rgbString(),    // 線の下の塗りつぶしの色
             borderColor: colorSet.red,                                      // 線の色
@@ -44,13 +48,21 @@ let myRadarChart = new Chart(ctx[i], {
         responsive: true,
         maintainAspectRatio: false,
         
+        /*
+        title: {                // タイトル
+            display: true,      // 表示する
+            fontSize: 20,       // タイトルのフォント
+            text: title         //app.pyのchart_title
+        },
+        */
+        /*
         legend: {
-            display: false,     // 凡例を表示しない
-            //position: 'bottom', // 凡例の表示位置
+            position: 'bottom', // 凡例の表示位置
             labels: {
-                //fontSize: 20,   // 判例のフォントサイズ
+                fontSize: 20,   // 判例のフォントサイズ
             },
         },
+        */
         scale: {
             // スケールを隠す。
             display: true,      // メモリを表示する
@@ -66,6 +78,12 @@ let myRadarChart = new Chart(ctx[i], {
                 fontSize: 15,   // チャートラベルのフォントサイズ
                 fontColor: colorSet.yello
             },
+            /*
+            angleLines: {        // 軸（放射軸）
+                display: true,
+                color: "maroon"
+            },
+            */
             gridLines: {         // 補助線（目盛の線）
                 display: true,
                 color: colorSet.yellow
@@ -73,4 +91,4 @@ let myRadarChart = new Chart(ctx[i], {
         },
     }
 });
-}
+

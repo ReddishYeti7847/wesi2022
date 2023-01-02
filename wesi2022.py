@@ -120,16 +120,70 @@ def sites_index(id):
 
 @app.route("/sites/show/<int:id>")
 def sites_show(id):
+    itemLabels = ["総合平均", "自然な姿", "ゆたかな生き物", "水のきれいさ", "快適な水辺", "地域とのつながり"]
+    subItemLabels = [
+        ["自然なすがた", "ゆたかな生き物", "水のきれいさ", "快適な水辺", "地域とのつながり"],
+        ["水の流れはゆたかですか", "岸のようすは自然らしいですか" ,"魚が川をさかのぼれるだろうか"],
+        ["河原と水辺に植物がはえていますか", "鳥はいますか", "魚がいますか", "川底に生き物がいますか"],
+        ["水は透明ですか？", "水はくさくないですか", "水はきれいですか"],
+        ["川やまわりのけしきは美しいですか", "ごみが目につきますか", "水にふれてみたいですか", "どんなにおいを感じますか", "どんな音が聞こえますか"],
+        ["川にまつわる話を聞いたことがありますか", "水辺に近づきやすいですか", "多くの人が利用していますか", "産業などの活動", "環境の活動"]
+    ]
+    
+    s = [
+        ["value00", "value01", "value02", "value03", "value04"],
+        ["value10", "value11", "value12"],
+        ["value20", "value21", "value22", "value23"],
+        ["value30", "value31", "value32"],
+        ["value40", "value41", "value42", "value43", "value44"],
+        ["value50", "value51", "value52", "value53", "value54"],
+    ]
+
+    subItemVals = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ]
+    
     site   = Site.query.filter_by(id=id).first()
     
+    subItemVals[0][0] = site.value00
+    subItemVals[0][1] = site.value01
+    subItemVals[0][2] = site.value02
+    subItemVals[0][3] = site.value03
+    subItemVals[0][4] = site.value04
+    subItemVals[1][0] = site.value10
+    subItemVals[1][1] = site.value11
+    subItemVals[1][2] = site.value12
+    subItemVals[2][0] = site.value20
+    subItemVals[2][1] = site.value21
+    subItemVals[2][2] = site.value22
+    subItemVals[2][3] = site.value23
+    subItemVals[3][0] = site.value30
+    subItemVals[3][1] = site.value31
+    subItemVals[3][2] = site.value32
+    subItemVals[4][0] = site.value40
+    subItemVals[4][1] = site.value41
+    subItemVals[4][2] = site.value42
+    subItemVals[4][3] = site.value43
+    subItemVals[4][4] = site.value44
+    subItemVals[5][0] = site.value50
+    subItemVals[5][1] = site.value51
+    subItemVals[5][2] = site.value52
+    subItemVals[5][3] = site.value53
+    subItemVals[5][4] = site.value54
+    
     site_chart = {
-        "chart_labels":"仮項目1, 仮項目2, 仮項目3",
-        "chart_data":"2, 3, 5",
+        "chart_labels":"仮項目1, 仮項目2, 仮項目3, 仮項目4", 
+        "chart_data":"2, 3, 5, 1",
         "chart_title":"仮タイトル",
         "chart_target":"仮ターゲット",
     }
     
-    return render_template("site_show.html", title = "WESI2022", site = site, site_chart = site_chart)
+    return render_template("site_show.html", title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = s, site = site, site_chart = site_chart)
 
 #CSVを利用してデータを入力する
 @app.route("/csv_import")

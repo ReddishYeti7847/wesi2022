@@ -247,3 +247,19 @@ Bootstrap
         https://qiita.com/kubochiro/items/874ccddb564c7e684000
     ※入門
         https://www.chartjs.org/docs/latest/getting-started/
+    
+    
+    # commit "site_index.htmlとsite_show.htmlにbootstrapのデザインを適応して整えた。static/js/graph.jsが読み込まれていない"
+    
+2022/12/31
+    Failed to load resource: the server responded with a status of 404 ()
+        graph.jsが見つからない
+        
+        ※Failed to load resource: the server responded with a status of 404 (Not Found)の原因と解決策
+            https://qiita.com/peco4107/items/6c8fba1a13c54a5447a7
+        
+        url_for()を使うと解決できる    
+        <script type="text/javascript" src="{{ url_for('static', filename='js/graph.js') }}"></script>
+        
+        ※【Python】【Flask】外部CSSファイルやJavaScriptを読み込む
+            https://max999blog.com/python-flask-import-css-javascript/

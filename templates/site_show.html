@@ -113,18 +113,47 @@
             </div>
         </div>
     </div>
+    
+    {% for i in range(itemLabels | length) %}
+    <div class="row detailed-informations">
+        <div class="col-xs-12 col-md-8 col-sm-8">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th colspan="3">{{ itemLabels[i] }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for j in range(subItemLabels[i] | length) %}
+                        <tr>
+                            <td class="item-index">{{ j + 1 }}</td>
+                            <td>{{ subItemLabels[i][j] }}</td>
+                            <td class="item-value">{{ subItemVals[i][j] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 col-sm-4 d-flex align-items-center">
+            <canvas id="siteChart{{ i }}"></canvas>
+            <input type="hidden" id="chart_labels" name="chart_labels" value="{{ site_chart.chart_labels }}">
+            <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}">
+            <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}">
+            <input type="hidden" id="chart_data" name="chart_data" value="{{ site_chart.chart_data }}">
+        </div>
+    </div>
+    {% endfor %}
 </div>
 
 <div class="container">
     <div class="row my-4">
         <canvas id="myChart"></canvas>
     </div>
-    <input type="hidden" id="chart_labels" name="chart_labels" value="{{ site_chart.chart_labels }}">
-    <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}">
-    <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}">
-    <input type="hidden" id="chart_data" name="chart_data" value="{{ site_chart.chart_data }}">
 </div>
-<script type="text/javascript" src="static/js/graph.js"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/graph.js') }}"></script>
 
 {#
 <div class="row detailed-informations">
