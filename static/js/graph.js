@@ -1,15 +1,24 @@
 //let title = document.getElementById('chart_title').value;
 //let target = document.getElementById('chart_target').value;
-let dstr = String(document.getElementById('chart_data').value);
-let darr = dstr.split(',');
-let dlabel = String(document.getElementById('chart_labels').value);
-let larr = dlabel.split(',');
+let darr = []
+let larr = []
+for (let i = 0; i < 6; i++) {
+    var str = 'chart_data' + i.toString();
+    let dstr = String(document.getElementById(str).value);
+    darr.push(dstr.split(','));
+
+    var str = 'chart_labels' + i.toString();
+    let dlabel = String(document.getElementById(str).value);
+    larr.push(dlabel.split(','));
+}
 
 let ctx = []
 for (let i = 0; i < 6; i++) {
     var str = 'siteChart' + i.toString();
     ctx.push(document.getElementById(str).getContext('2d'));
 }
+
+//ctx.push(document.getElementById("testChart").getContext('2d'));
 
 // 色の設定
 var colorSet = {
@@ -29,9 +38,9 @@ for (let i = 0; i <6; i++) {
 let myRadarChart = new Chart(ctx[i], {
     type: 'radar',
     data: {
-        labels: larr,
+        labels: larr[i],
         datasets: [{
-            data:darr,//app.pyのchart_data
+            data:darr[i],//app.pyのchart_data
             
             backgroundColor: color(colorSet.red).alpha(0.5).rgbString(),    // 線の下の塗りつぶしの色
             borderColor: colorSet.red,                                      // 線の色

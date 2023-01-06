@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import pandas as pd
 import numpy as np
+import json
 
 app = Flask(__name__)
 
@@ -176,20 +177,61 @@ def sites_show(id):
     subItemVals[5][3] = site.value53
     subItemVals[5][4] = site.value54
     
-    site_chart = {
+    site_c = {
         "chart_labels":"仮項目1, 仮項目2, 仮項目3, 仮項目4", 
         "chart_data":"2, 3, 5, 1",
         "chart_title":"仮タイトル",
         "chart_target":"仮ターゲット",
     }
     
-    return render_template("site_show.html", title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = s, site = site, site_chart = site_chart)
+    #5, (3, 4, 3, 5, 5)
+#    labels = [
+#        ["", "", "", "", ""],
+#        ["", "", ""],
+#        ["", "", "", ""],
+#        ["", "", ""],
+#        ["", "", "", "", ""],
+#        ["", "", "", "", ""]
+#    ]
+    
+    #レーダーチャートのデータ
+    site_chart_json = []
+    site_chart = [{}, {}, {}, {}, {}, {}]
+
+    for i in range(len(subItemLabels)):
+        labels = ["", "", "", "", ""]
+        vals = [0, 0, 0, 0, 0]
+        
+        label = ""
+        val = ""
+        
+        site_chart_json.append({})
+        
+        for j in range(len(subItemLabels[i])):
+            if j > 0:
+                label = label + ", "
+                val = val + ", "
+            
+            label = label + str(subItemLabels[i][j])
+            val = val + str(subItemVals[i][j])
+        
+        site_chart_json[i]["chart_labels"] = label
+        site_chart_json[i]["chart_data"] = val
+        #site_chart_json[i] = json.dumps(site_chart_json[i], ensure_ascii=False)
+        
+        site_chart[i] = site_chart_json[i]
+
+    
+    #return site_chart_json   #これをコメントアウトするとjsonのデータだけを確認できる
+    #return str(type(site_chart_json[1]))   #これをコメントアウトするとjsonのデータだけを確認できる
+    
+    return render_template("site_show.html", title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = subItemVals, site = site, site_chart = site_chart)
 
 #CSVを利用してデータを入力する
 @app.route("/csv_import")
 def csv_import():
     #データベースをリセットする
-    deletes = Survey.query.all()
+    deletes = Site.query.all()
     for delete in deletes:
         db.session.delete(delete)
         db.session.commit()
@@ -277,6 +319,7 @@ def csv_import():
         site.value02     = df.loc[i]["value02"]
         site.value03     = df.loc[i]["value03"]
         site.value04     = df.loc[i]["value04"]
+        site.value10     = df.loc[i]["value10"]
         site.value11     = df.loc[i]["value11"]
         site.value12     = df.loc[i]["value12"]
         site.value20     = df.loc[i]["value20"]
@@ -314,6 +357,34 @@ def test():
 
     return render_template("var_test.html", title = "WESI2022")#, regions = regions, region_survey_count = survey_count)
 
+@app.route("/json_test")
+def json_test():
+    
+    j = [
+        {
+            "項目":"A, B, C",
+            "数値":[2, 3, 5]
+        },
+        {
+            "項目":"D, E",
+            "数値":"1, 4"
+        }
+    ]
+    js = json.dumps(j)
+    
+    vj = []
+    vj.append({})
+    vj[0]["str"] = "S"
+    vj[0]["sta"] = "A"
+    vj.append({})
+    vj[1]["str"] = "S"
+
+
+    return vj
+    #return j[0]["数値"][2]
+    
+    
+    #return render_template("json_test.html", js = js)
 
 if __name__ == "__main__":
     app.run(debug=True, port = 8080)

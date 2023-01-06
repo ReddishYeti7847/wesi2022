@@ -138,20 +138,26 @@
         </div>
         <div class="col-xs-12 col-md-4 col-sm-4 d-flex align-items-center">
             <canvas id="siteChart{{ i }}"></canvas>
-            <input type="hidden" id="chart_labels" name="chart_labels" value="{{ site_chart.chart_labels }}">
-            <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}">
-            <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}">
-            <input type="hidden" id="chart_data" name="chart_data" value="{{ site_chart.chart_data }}">
+            <input type="hidden" id="chart_labels{{ i }}" name="chart_labels" value="{{ site_chart[i].chart_labels }}">
+            {# <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}"> #}
+            {# <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}"> #}
+            <input type="hidden" id="chart_data{{ i }}" name="chart_data" value="{{ site_chart[i].chart_data }}">
         </div>
     </div>
     {% endfor %}
 </div>
 
+{# 仮のグラフ
 <div class="container">
     <div class="row my-4">
-        <canvas id="myChart"></canvas>
+        <canvas id="testChart"></canvas>
+        <input type="hidden" id="chart_labels" name="chart_labels" value="{{ site_chart.chart_labels }}">
+        <input type="hidden" id="chart_title" name="chart_title" value="{{ site_chart.chart_title }}">
+        <input type="hidden" id="chart_target" name="chart_target" value="{{ site_chart.chart_target }}">
+        <input type="hidden" id="chart_data" name="chart_data" value="{{ site_chart.chart_data }}">
     </div>
 </div>
+#}
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/graph.js') }}"></script>
 

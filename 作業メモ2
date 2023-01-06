@@ -263,3 +263,29 @@ Bootstrap
         
         ※【Python】【Flask】外部CSSファイルやJavaScriptを読み込む
             https://max999blog.com/python-flask-import-css-javascript/
+
+2022/1/2
+    # commit "static/js/graph.jsを読み込み、複数のグラフを表示できるようにした"
+    
+    javascript関連
+        ※【JavaScript】数値から文字列に変換する
+            https://qiita.com/ndj/items/ccc1b36933fc52483018
+        ※for
+            https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/for
+        ※JavaScriptの配列操作を覚えよう (JavaScript基礎構文)
+            https://press.monaca.io/atsushi/9223
+            
+2022/1/6
+    json、辞書型
+        ※PythonにおいてのJSONファイルの取扱いあれこれ
+            https://qiita.com/wakaba130/items/5f54aed913156dc4438f
+        ※【Python】JSONデータの読み書きの基本（jsonモジュールの使い方）
+            https://hibiki-press.tech/python/json/1633
+        ※Pythonで辞書に要素を追加、辞書同士を連結（結合）
+            https://note.nkmk.me/python-dict-add-update/
+        
+    複数のグラフ
+        ※javascript chart.js 1ページ複数の円グラフ設置
+            https://teratail.com/questions/206943
+        ※chart.jsのグラフを複数個表示する方法
+            https://okwave.jp/qa/q9834370.html
