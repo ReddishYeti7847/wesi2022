@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Add Map</title>
+    {# <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> #}
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/map.css') }}" />
+    <script type="module" src="{{ url_for('static', filename='js/map.js') }}"></script>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>  {# ここでマップを表示 #}
+    <input type="hidden" id="lat" name="lat" value=-25.344>
+    <input type="hidden" id="lng" name="lng" value=131.030>
+
+    <!-- 
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAy8HaejG8a1961OtEyy4FKJ_OF0XhIof8&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>

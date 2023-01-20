@@ -2,6 +2,8 @@
 
 {% block header %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/map.css') }}" />
+<script type="module" src="{{ url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -9,6 +11,15 @@
 
 <div id="site" class="container">
     <!-- ここにマップを書く -->
+    <div class="row map">
+        <div class="col-xs-12 col-md-12 col-sm-12">
+            <div id="map"></div>
+            {% set marker = 1 %}
+            <input type="hidden" id="lat0" name="lat" value={{ site.latitude }}>
+            <input type="hidden" id="lng0" name="lng" value={{ site.longitude }}>
+            <input type="hidden" id="marker_count" name="count" value={{ marker }}>
+        </div>
+    </div>
     
     <div class="row basic-informations">
         <div class="col-xs-12 col-md-12 col-sm-12">
@@ -160,6 +171,7 @@
 #}
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/graph.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ map_key }}&callback=initMap&language=ja" defer></script>
 
 {#
 <div class="row detailed-informations">

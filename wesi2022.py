@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 #from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+#from flask_googlemaps import GoogleMaps
+#from flask_googlemaps import Map
 from sqlalchemy import func
 import pandas as pd
 import numpy as np
@@ -10,9 +12,14 @@ app = Flask(__name__)
 
 #app.config['SECRET_KEY'] = os.urandom(24)   #秘密鍵
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Root.123@localhost/scheme"
+map_key = "AIzaSyAy8HaejG8a1961OtEyy4FKJ_OF0XhIof8"     #githubに登録するときはキーを消す
+
 
 db = SQLAlchemy(app)
 #bootstrap = Bootstrap(app)
+#GoogleMaps(app)
+
+#GoogleMaps(app, key="AIzaSyAy8HaejG8a1961OtEyy4FKJ_OF0XhIof8")
 
 #データベースモデル定義
 class Region(db.Model):
@@ -111,13 +118,48 @@ def surveys_index(id):
     #site_count = Site.query.filter_by().group_by().count()
     survey_count = db.session.query(Survey.id, func.count(Site.survey_id).label("count")).filter().group_by(Site.survey_id).join(Site, Survey.id == Site.survey_id).all()
     
-    return render_template("survey_index.html", title = "WESI2022", surveys = surveys, area = area, region_count = region_count, area_count = area_count, survey_count = survey_count)
+    #map
+    #地点の座標　←　各地点の座標の平均、　地点は複数、　同じ県である必要性
+    surveys_map = Survey.query.filter_by(area_id = id).all()
+    #sites = Site.query.filter(Site.Survey.area_id == id).all()
+    
+    lat = 0
+    lats = []
+    lng = 0
+    lngs = []
+    count = 0
+    counts = 0
+    
+    i = 0
+    for survey_map in surveys_map:
+        sites_map = Site.query.filter_by(survey_id = survey_map.id).all()
+        lats.append([])
+        lngs.append([])
+        counts = counts + 1
+        
+        for site_map in sites_map:  #ここで各siteの座標の平均を求めておきたい
+            lat = lat + site_map.latitude
+            lng = lng + site_map.longitude
+            count = count + 1
+
+            #lats[i].append(site_map.latitude)
+            #lngs[i].append(site_map.longitude)
+        
+        lats[i] = lat / count
+        lngs[i] = lng / count
+        i = i + 1
+    
+    test = [lats, lngs]
+    
+    #return test
+    
+    return render_template("survey_index.html", map_key = map_key, title = "WESI2022", surveys = surveys, area = area, region_count = region_count, area_count = area_count, survey_count = survey_count, lats = lats, lngs = lngs, counts = counts)
 
 @app.route("/sites/index/<int:id>")
 def sites_index(id):
     survey  = Survey.query.filter_by(id=id).first()
     sites   = Site.query.all()
-    return render_template("site_index.html", title = "WESI2022", survey = survey, sites = sites)
+    return render_template("site_index.html", map_key = map_key, title = "WESI2022", survey = survey, sites = sites)
 
 @app.route("/sites/show/<int:id>")
 def sites_show(id):
@@ -225,7 +267,7 @@ def sites_show(id):
     #return site_chart_json   #これをコメントアウトするとjsonのデータだけを確認できる
     #return str(type(site_chart_json[1]))   #これをコメントアウトするとjsonのデータだけを確認できる
     
-    return render_template("site_show.html", title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = subItemVals, site = site, site_chart = site_chart)
+    return render_template("site_show.html", map_key = map_key, title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = subItemVals, site = site, site_chart = site_chart)
 
 #CSVを利用してデータを入力する
 @app.route("/csv_import")
@@ -385,6 +427,36 @@ def json_test():
     
     
     #return render_template("json_test.html", js = js)
+
+@app.route("/map_test")
+def map_test():
+    mymap = Map(
+        identifier="view-side",
+        lat=37.4419,
+        lng=-122.1419,
+        markers=[(37.4419, -122.1419)]
+    )
+    sndmap = Map(
+        identifier="sndmap",
+        lat=37.4419,
+        lng=-122.1419,
+        markers=[
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+             'lat': 37.4419,
+             'lng': -122.1419,
+             'infobox': "<b>Hello World</b>"
+          },
+          {
+             'icon': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+             'lat': 37.4300,
+             'lng': -122.1400,
+             'infobox': "<b>Hello World from other place</b>"
+          }
+        ],
+        styles="height:300px;width:300px;margin:0;"
+    )
+    return render_template('map_test.html', mymap=mymap, sndmap=sndmap)
 
 if __name__ == "__main__":
     app.run(debug=True, port = 8080)

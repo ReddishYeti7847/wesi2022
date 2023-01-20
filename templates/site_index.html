@@ -1,13 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/map.css') }}" />
+<script type="module" src="{{ url_for('static', filename='js/map.js') }}"></script>
+
 <div id="surveys" class="container">
-    {#
     <div class="row map">
         <div class="col-xs-12 col-md-12 col-sm-12">
             <div id="map"></div>
+            {% set marker = namespace(count = 0) %}
+            {% for site in sites %}
+                {% if site.survey_id == survey.id %}
+                    <input type="hidden" id="lat{{ marker.count }}" name="lat" value={{ site.latitude }}>
+                    <input type="hidden" id="lng{{ marker.count }}" name="lng" value={{ site.longitude }}>
+                    {% set marker.count = marker.count + 1 %}
+                {% endif %}
+            {% endfor %}
+            <input type="hidden" id="marker_count" name="count" value={{ marker.count }}>
         </div>
     </div>
-    #}
     
     <div class="row basic-informations">
         <div class="col-md-12">
@@ -115,4 +125,6 @@
         </div>
     </div>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ map_key }}&callback=initMap&language=ja" defer></script>
 {% endblock %}

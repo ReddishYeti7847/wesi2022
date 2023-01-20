@@ -289,3 +289,93 @@ Bootstrap
             https://teratail.com/questions/206943
         ※chart.jsのグラフを複数個表示する方法
             https://okwave.jp/qa/q9834370.html
+    
+    # commit "siteテーブルの情報をグラフに反映させて、それぞれのグラフに対応させるようにした。レイアウトが乱れたり、Noneの対策が出来ていない問題点もある"
+    
+2022/1/7
+    google maps
+    
+        インストール
+        $ pip install flask-googlemaps
+        
+        APIキーを取得する
+            API キーを使用する
+                https://developers.google.com/maps/documentation/javascript/get-api-key?ref=morioh.com&utm_source=morioh.com
+        
+            [Google Maps Platform] > [認証情報] ページに移動
+            
+            「このページを表示するには、プロジェクトを選択してください。」で「プロジェクト作成をクリック」
+                プロジェクト名：wesi2022
+                場所：組織なし
+                
+    google mapのチュートリアル
+        マーカーが配置された Google マップをウェブサイトに追加する
+            https://developers.google.com/maps/documentation/javascript/adding-a-google-map#maps_add_map-css
+            
+        上を試すとエラーが出る
+            Google Maps JavaScript API error: RefererNotAllowedMapError
+            https://developers.google.com/maps/documentation/javascript/error-messages#referer-not-allowed-map-error
+            Your site URL to be authorized: https://ef5caf0d0a8d4796be3372a5d609c5c4.vfs.cloud9.us-east-1.amazonaws.com/map_test
+        
+        「RefererNotAllowedMapError」
+            エラーメッセージ
+                Maps JavaScript API を読み込んでいる現在の URL が、許可対象のリファラーの一覧に追加されていません。Cloud Console で API キーのリファラー設定を確認してください。
+                詳しくは、Maps JavaScript API と API キーを取得するをご覧ください。
+            
+                https://developers.google.com/maps/documentation/javascript/error-messages#referer-not-allowed-map-error
+                
+            API キーを制限する
+                https://developers.google.com/maps/documentation/javascript/get-api-key#restrict_key
+                
+                ・[Google Maps Platform] > [認証情報] ページに移動
+                ・制限を設定する API キー「Maps JavaScript API」を選択する。選択した API キーのプロパティ ページが表示される。
+                ・[キーの制限] で、アプリケーションの制限] のリストで [HTTP リファラー（ウェブサイト）] を選択
+                    （ウェブサイトの制限では、空白にして、API キーはすべてのウェブサイトからリクエストを受ける状態だとエラーが出たまま）
+                    ・ウェブサイトの制限で「ADD」を選択する。「HTTP リファラーの追加」では、「https://ef5caf0d0a8d4796be3372a5d609c5c4.vfs.cloud9.us-east-1.amazonaws.com/*」を入力する
+                    
+                ・APIの制限は、「キーを制限」を選択する、「Maps JavaScript API」を選択する
+                ・「保存」をクリックする
+
+                ・この状態でもエラーが出るので…
+                
+            OAuth 同意画面を構成
+                ・「外部」を選択
+                
+                ・OAuth 同意画面
+                    ・「アプリ情報」の「アプリ名」に「WESI2022」、「ユーザーサポートメール」と「デベロッパーの連絡先情報」の「メールアドレス」に自分のメールアドレスを入力。「保存して次へ」をクリック
+                    ・「スコープ」では何も入力せずに「保存して次へ」をクリック
+                    ・「テストユーザー」では、「+ADDUSER」をクリック、「ユーザーを追加」では自分のメールアドレスを入力して「追加」をクリック。「保存して次へ」をクリック
+                    ・「概要」では内容を確認して「ダッシュボードに戻る」をクリック
+                    
+            ・この状態でもエラーが出る
+            
+            APIキーを確認して、修正したら通った。
+            
+    再びflask-googlemaps
+        ・サンプルコードを打ち込んで実行するとマップが表示されない
+        ・エラーコードは「Uncaught SyntaxError: Unexpected identifier 'styles'」
+            ・styles: ""でエラーが発生しているので、flask-googlemapsの使用を断念。
+            
+    URL
+    flask-googlemaps
+        https://pypi.org/project/flask-googlemaps/
+        https://morioh.com/p/f458678a9ffa
+        
+    googlemaps
+        ※概要
+            https://console.cloud.google.com/google/maps-apis/home?project=wesi2022
+        ※マーカーが配置された Google マップをウェブサイトに追加する
+            https://developers.google.com/maps/documentation/javascript/adding-a-google-map#maps_add_map-css
+        ※Google Cloud プロジェクトを設定する
+            https://developers.google.com/maps/documentation/javascript/cloud-setup
+        ※認証情報
+            https://console.cloud.google.com/apis/credentials?project=wesi2022
+            
+        ※Google MAP Javascript API 実装時に発生したエラーの対応方法
+            https://www.nowte.net/article/1740/
+        ※GoogleMapが表示されない４つの原因と解決方法 - APIキーの設定ミスが9割
+            https://yumegori.com/googlemap-not-display20200318#chapter-3
+        ※Google Maps APIを使った地図の埋め込みと、カスタマイズ方法
+            https://yumegori.com/googlemap-api-customize#chapter-2
+        ※GoogleMapAPIを使ってみた。【2020年9月】
+            https://gambaranaide.work/post-624/#index_id2
