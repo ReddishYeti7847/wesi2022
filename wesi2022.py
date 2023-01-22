@@ -97,14 +97,28 @@ class Site(db.Model):
 def index():
     regions         = Region.query.all()
     areas           = Area.query.all()
-    region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.region_id).group_by(Region.name, Survey.id).count()
-    area_survey_count   = Survey.query.filter_by(area_id=id).group_by().count()
+    #region_survey_count = Survey.query.filter_by().join(Area, Area.id == Survey.area_id).join(Region, Region.id == Area.region_id).group_by(Region.name, Survey.id).count()
+    #area_survey_count   = Survey.query.filter_by(area_id=id).group_by().count()
     #survey_count    = Survey.query.filter_by(area_id=id).group_by(Survey.area_id).count()
-    return render_template("index.html", title = "WESI2022", regions = regions, areas = areas, region_survey_count = region_survey_count, survey_count = area_survey_count)
+    
+    #カウント
+    area_counts = [0] * 49
+    region_counts = [0] * 8
+    
+    for region_id in regions:
+        area_region_ids = Area.query.filter_by(region_id=region_id.id).all()
+        
+        for area_region_id in area_region_ids: 
+            survey_count = Survey.query.filter_by(area_id=area_region_id.id).count()
+
+            region_counts[region_id.id] = region_counts[region_id.id] + survey_count
+            area_counts[area_region_id.id] = survey_count
+    
+    return render_template("index.html", title = "WESI2022", regions = regions, areas = areas, region_counts = region_counts, area_counts = area_counts)
     
 @app.route("/surveys/index/<int:id>")
 def surveys_index(id):
-    surveys = Survey.query.all()
+    surveys = Survey.query.filter_by(area_id=id).all()
     area    = Area.query.filter_by(id=id).first()
     
     #survey_count = Region.query.filter_by(Area.area_id=id).count().sum()
@@ -113,10 +127,61 @@ def surveys_index(id):
     #subq = db.session.query(Area.id).filter(Area.id == id).group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id)
     #survey_count = db.session.query(subq, func.count(Survey.area_id).label("count")).first()
     
-    region_count = None
+    #region_count = None
     area_count = db.session.query(Area.id, func.count(Survey.area_id).label("count")).filter(Area.id == id).group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id).first()    #AreaテーブルのidとSurveyテーブルのarea_idの個数を数える
     #site_count = Site.query.filter_by().group_by().count()
     survey_count = db.session.query(Survey.id, func.count(Site.survey_id).label("count")).filter().group_by(Site.survey_id).join(Site, Survey.id == Site.survey_id).all()
+    
+    #カウント
+    test = []
+    region_counts = 0
+    site_counts = []
+
+    sites_date_max = []
+    sites_date_min = []
+
+    #調査のカウント（地方）
+    region_id = area.region_id
+    area_region_ids = Area.query.filter_by(region_id=area.region_id).all()
+    for area_region_id in area_region_ids:
+        test.append(area_region_id.id)
+        
+        #db.session.query(func.count(Survey.id).label("count")).filter(Survey.area_id == region_id.id).first()#.group_by(Survey.area_id).join(Survey, Area.id == Survey.area_id).first()
+        
+        region_count = Survey.query.filter_by(area_id=area_region_id.id).count()#.label("count")
+        region_counts = region_counts + region_count
+    
+    #地点のカウント（調査）と調査日/期間
+    j = 0
+    survey_area_ids = Survey.query.filter_by(area_id=id).all()
+    for survey_area_id in survey_area_ids:
+        site_count = Site.query.filter_by(survey_id=survey_area_id.id).count()
+        site_counts.append(site_count)
+        
+        sites_date = Site.query.filter_by(survey_id=survey_area_id.id)
+        site_date_max = db.session.query(func.max(Site.date)).filter(Site.survey_id == survey_area_id.id).first()
+        site_date_min = db.session.query(func.min(Site.date)).filter(Site.survey_id == survey_area_id.id).first()
+        sites_date_max.append(site_date_max)
+        sites_date_min.append(site_date_min)
+        
+        #i = 0
+        #for site_date in sites_date:
+            #now_date = site_date.date
+            #if i < 1:
+                #sites_date_max.append(site_date.date)
+                #sites_date_min.append(site_date.date)
+            #elif sites_date_max[j] < site_date.date:
+                #sites_date_max[j] = site_date
+            #elif sites_date_min[j] > site_date.date:
+                #sites_date_min[j] = site_date
+                
+            #i = i + 1
+        
+        #j = j + 1
+        #site_date_min = db.session.query(func.min(Site.date)).filter(Site.survey_id == survey_area_id.id).first()
+        
+        #sites_date_max.append(site_date_max.date)
+        #sites_date_min.append(site_date_min)
     
     #map
     #地点の座標　←　各地点の座標の平均、　地点は複数、　同じ県である必要性
@@ -153,7 +218,7 @@ def surveys_index(id):
     
     #return test
     
-    return render_template("survey_index.html", map_key = map_key, title = "WESI2022", surveys = surveys, area = area, region_count = region_count, area_count = area_count, survey_count = survey_count, lats = lats, lngs = lngs, counts = counts)
+    return render_template("survey_index.html", map_key = map_key, title = "WESI2022", surveys = surveys, area = area, region_count = region_count, area_count = area_count, region_counts = region_counts, site_counts = site_counts, sites_date_max = sites_date_max, sites_date_min = sites_date_min, lats = lats, lngs = lngs, counts = counts)
 
 @app.route("/sites/index/<int:id>")
 def sites_index(id):

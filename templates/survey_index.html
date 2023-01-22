@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ area.region.name }}（{{ area_count }}）</a></td>
+                            <td class="position-relative" colspan="2"><a class="stretched-link" href="/">{{ area.region.name }}（{{ region_counts }}）</a></td>
                         </tr>
                     </tbody>
                     
@@ -64,13 +64,11 @@
                     </thead>
                     <tbody>
                         {% for survey in surveys %}
-                        {% if survey.area_id == area.id %}
                         <tr class="tr-hover">
-                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}"></a></td>
+                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ sites_date_min[loop.index0][0] }} ～ {{ sites_date_max[loop.index0][0] }}</a></td>
                             <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ survey.surveyor }}</a></td>
-                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ survey.name }}（）</a></td>
+                            <td class="position-relative"><a class="stretched-link" href="/sites/index/{{ survey.id }}">{{ survey.name }}（{{ site_counts[loop.index0] }}）</a></td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
