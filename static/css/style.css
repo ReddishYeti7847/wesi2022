@@ -1,0 +1,274 @@
+// --------------------------------------------
+//  レスポンシブ 対応
+// --------------------------------------------
+// 大デバイス（デスクトップ, 1200px 未満）
+@media (min-width: 992px) {
+  body {
+    font-size: 1.0rem;
+  }
+  #map {
+    height: 400px;
+  }
+}
+// 中デバイス（タブレット, 992px 未満）
+@media (max-width: 991.98px) {
+  body {
+    font-size: 1.0rem;
+  }
+  #map {
+    height: 250px;
+  }
+}
+// 小デバイス（横向きモバイル, 768px 未満）
+@media (max-width: 767.98px) {
+  body {
+    font-size: 1.0rem;
+  }
+  #map {
+    height: 250px;
+  }
+}
+// @include media-breakpoint-up(sm) {
+// 極小デバイス（縦向きモバイル, 576px 未満）
+@media (max-width: 575.98px) {
+  body {
+    font-size: 1.0rem;
+  }
+  #map {
+    height: 250px;
+  }
+}
+
+
+// --------------------------------------------
+// 共通
+// --------------------------------------------
+// ヘッダを避ける
+body {
+  padding-top: 60px;
+  padding-bottom: 30px;
+}
+
+// --------------------------------------------
+// ヘッダ
+// --------------------------------------------
+// ヘッダメニューの要素
+header .nav-item {
+  padding: 0.5rem;
+}
+
+// --------------------------------------------
+// フッタ
+// --------------------------------------------
+フッタ要素
+footer {
+  position: relative;
+}
+// フッタに無理やり高さを持たせる
+footer:after {
+    content: "";
+    display: block;
+    clear: both;
+    height: 30px;
+    overflow: hidden;
+}
+footer .footer-item-left {
+  position: absolute;
+  left: 0;
+}
+footer .footer-item-right {
+  position: absolute;
+  right: 0;
+}
+footer .footer-item {
+  padding: 0.5rem;
+  font-size: 0.5rem;
+}
+
+// --------------------------------------------
+// デバッグ
+// --------------------------------------------
+.debug_dump {
+  color: lightgrey;
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
+// --------------------------------------------
+// #regions アコーディオンメニュー
+// --------------------------------------------
+#regions {
+  > ul {
+    padding: 1px;
+    width: 100%;
+  }
+  ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  #accordion_menu {
+    width: 100%;
+    margin-top: -5px;
+  }
+  #accordion_menu a {
+    color: #333;
+  }
+  #accordion_menu > li {
+    border: #ccc 1px solid;
+    margin-bottom: -1px;
+  }
+  #accordion_menu a[data-toggle="collapse"] {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    position: relative;
+  }
+  #accordion_menu a[data-toggle="collapse"]:hover {
+    background: lightgrey;
+  }
+  
+  // ">"マーク
+  #accordion_menu a[data-toggle="collapse"]::after {
+    content:"";
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-top: #666 1px solid;
+    border-right: #666 1px solid;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  #accordion_menu a[aria-expanded=false]::after {
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    transition-duration: 0.3s;
+  }
+  #accordion_menu a[aria-expanded=true]::after {
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    transition-duration: 0.3s;
+  }
+  
+  // 開いた中身
+  [id^="region"] li {
+    padding: 10px 10px 10px 30px;
+  }
+  [id^="region"] li:hover {
+    background-color: #DDEEFF;
+  }
+  [id^="region"] a {
+    text-decoration: none;
+  }
+  
+  // 注意書き
+  .note {
+    width: 100%;
+    padding: 5px 10px;
+    // text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+  }
+}
+
+// --------------------------------------------
+// #surveys
+// --------------------------------------------
+#surveys {
+  #map {
+    width: 100%;
+    margin: 10px 0px 10px;
+  }
+  table tr td {
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  table a {
+    text-decoration: none;
+  }
+  table tr.tr-hover:hover {
+    background-color: #DDEEFF; 
+  }
+}
+
+// --------------------------------------------
+// #sites
+// --------------------------------------------
+#sites {
+  #map {
+    width: 100%;
+    margin: 10px 0px 10px;
+  }
+  table tr td {
+    color: #333;
+    white-space: nowrap;
+  }
+  table td.td-wrap {
+    white-space: normal;
+  }
+  table a {
+    text-decoration: none;
+  }
+  table a {
+    text-decoration: none;
+  }
+  table tr.tr-hover:hover {
+    background-color: #DDEEFF; 
+  }
+}
+
+// --------------------------------------------
+// #site
+// --------------------------------------------
+#site {
+  #map {
+    width: 100%;
+    margin: 10px 0px 10px;
+  }
+
+  table tr, td {
+    color: #333;
+    white-space: nowrap;
+  }
+  table td.td-wrap {
+    white-space: normal;
+  }
+  table a {
+    text-decoration: none;
+  }
+  table tr.tr-hover:hover {
+    background-color: #DDEEFF; 
+  }
+
+  .item-index {
+    text-align: center;
+    width: 25px;
+  }
+  .item-value {
+    width: 25px;
+  }
+
+  .chart {
+    height: 250px;
+  }
+}
+
+// --------------------------------------------
+// #help
+// --------------------------------------------
+#help {
+  .about {
+    padding: 10px;
+  }
+}

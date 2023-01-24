@@ -333,6 +333,10 @@ def sites_show(id):
     #return str(type(site_chart_json[1]))   #これをコメントアウトするとjsonのデータだけを確認できる
     
     return render_template("site_show.html", map_key = map_key, title = "WESI2022", itemLabels = itemLabels, subItemLabels = subItemLabels, subItemVals = subItemVals, site = site, site_chart = site_chart)
+    
+@app.route("/help")
+def help():
+    return render_template("help.html", title = "WESI2022")
 
 #CSVを利用してデータを入力する
 @app.route("/csv_import")

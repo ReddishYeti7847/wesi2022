@@ -382,3 +382,15 @@ Bootstrap
         
 2022/1/20
     # commit "surveyとsiteにGoogleMapを導入した。"
+    
+2022/1/22
+    # commit "areaとsurveyとsiteのカウント、surveyの日付の表示を追加した。"
+    
+    URL
+        ※Python SQLAlchemy ORM Queryで最大値 MAX(), 最小値 MIN() を取得する関数
+            https://ssrv.net/tech/python-sqlalchemy-max-query/
+        ※Pythonのリスト（配列）を任意の値・要素数で初期化
+            https://note.nkmk.me/python-list-initialize/
+        ※jinjaテンプレートでfor文ループ中の変数を更新したい
+            https://qiita.com/waro_a2606/items/ae92dc26841a302ca95e
+            
